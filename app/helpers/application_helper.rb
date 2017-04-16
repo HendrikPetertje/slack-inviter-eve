@@ -14,4 +14,16 @@ module ApplicationHelper
   def background_image
     @bg ||= (ENV["BACKGROUND_IMAGE"] || "http://i.imgur.com/vDADTWP.jpg")
   end
+
+  def eve_link
+      response_type = 'code'
+      redirect_uri = URI.escape("#{Rails.application.config.callback_url}")
+      client_id = Rails.application.config.client_id
+      scope = nil
+      state = @current_user.presence || 'nothing'
+
+    link_to("https://login.eveonline.com/oauth/authorize/?response_type=#{response_type}&redirect_uri=#{redirect_uri}&client_id=#{client_id}&scope=#{scope}&state=#{state}") do
+      image_tag "/assets/img/login.png"
+    end
+  end
 end

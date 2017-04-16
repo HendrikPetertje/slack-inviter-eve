@@ -1,31 +1,23 @@
 # Slack Community Inviter/Landing Page
 
-A simple application, to help bootstrap your slack community.
+A simple application, to help bootstrap your slack EVE community.
+
+![login](http://i.imgur.com/IFnzkqS.jpg)
+
+![create](http://i.imgur.com/0Fq0AX3.jpg)
 
 # Setup
 
 1. Signup for a slack team on their homepage(https://slack.com/)
   - Go through the entire process.
-  - visit https://api.slack.com/web#authentication and get a token! (easy way to turn off invitations is by revoking the token!)
-2. Publish this app, add your configurations.
+  - visit https://api.slack.com/custom-integrations/legacy-tokens and get a token! (easy way to turn off invitations is by revoking the token!)
+2. Register a new OATH app on https://developers.eveonline.com/applications
+3. Publish this app, add your configurations. The required variables can be
+   found in .env.example
 
-3. Submit your heroku url to https://keep-awake.herokuapp.com/ - add `_ping` for optimal performance (eg http://example.herokuapp.com/_ping )
-
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
-## Usage
-
-### POST /invitations
-
-To enqueue an invitation request:
-
-```bash
-curl -X POST \
-  -H "Content-Type: application/json" \
-  -d "{\"email\":\"andy@example.com\"}" \
-  http://localhost:3000/invitations
-```
-
-The route is meant to be used by a JavaScript client. You can whitelist CORS origins in `config/application.rb`.
+4. Submit your heroku url to https://keep-awake.herokuapp.com/ - add `_ping` for optimal performance (eg `http://example.herokuapp.com/_ping` )
+5. add the free heroku addon "Heroku Redis" to your app.
+6. Activate the sidekiq worker in the resources tab on your heroku dashboard.
 
 ## Development
 

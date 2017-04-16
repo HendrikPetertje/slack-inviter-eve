@@ -18,10 +18,14 @@ module Inviter
 
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
-    # config.i18n.default_locale = :de
+    # config.i18n.default_locale = :dhe
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
+    config.client_id = ENV.fetch('CLIENT_ID')
+    config.secret_key = ENV.fetch('SECRET_KEY')
+    config.callback_url = ENV.fetch('CALLBACK_URL')
+    config.alliances = ENV.fetch('ALLIANCES').split(',')
 
     config.middleware.insert_before 0, "Rack::Cors" do
       allow do

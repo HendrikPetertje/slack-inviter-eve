@@ -1,0 +1,46 @@
+<div id="h">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-10 col-md-offset-1 mt">
+        <h3><%= top_subtitle %></h3>
+
+        <h1 class="mb"><%= title %></h1>
+      </div>
+    </div>
+    <div class="row mb">
+      <% if flash[:error] %>
+        <div class="col-md-6 col-md-offset-3 mt">
+          <div class="alert alert-success">
+            <h2>You don't seem to be part of the alliance</h2>
+          </div>
+        </div>
+      <% end %>
+      <% if flash[:success] %>
+        <div class="col-md-6 col-md-offset-3 mt">
+          <div class="alert alert-success">
+            <h2>WOOHOO! Check your email!</h2>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="row">
+      <p><%= title.downcase %> was created to help us communicate with eachother and share dank memes.</p>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3 mt">
+        <p class="lead text-white">
+          <%= eve_link %>
+        </p>
+      </div>
+    </div>
+  </div>
+  <! --/container -->
+</div>
+<! --/h -->
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="assets/js/retina-1.1.0.js"></script>
