@@ -11,6 +11,7 @@ class EveAuth
     character_info = fetch_character_info(bearer_token)
     return character_info if character_info[:status] == 'error'
     alliance_info = fetch_alliance_info(character_info)
+    return alliance_info if alliance_info[:status] == 'error'
     user_allowed_access?(alliance_info)
   end
 
