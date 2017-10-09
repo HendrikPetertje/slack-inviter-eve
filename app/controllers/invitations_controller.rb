@@ -1,7 +1,9 @@
 class InvitationsController < ApplicationController
 
   def new
+    @current_user = SecureRandom.hex
     if authenticated?
+      session[:auth_token] = @current_user
       @invitation = Invitation.new
       return render 'new'
     else
@@ -16,6 +18,8 @@ class InvitationsController < ApplicationController
   end
 
   def create
+    return redirect_to root_path unless valid_session?
+    return fail 'yes we made it'
     @invitation = Invitation.new(invitation_params)
 
     begin
@@ -47,6 +51,10 @@ class InvitationsController < ApplicationController
 
   def invitation_params
     params.require(:invitation).permit(:email)
+  end
+
+  def valid_session?
+    params[:invitation][:auth_token] == session[:auth_token]
   end
 
   def unprocessable
