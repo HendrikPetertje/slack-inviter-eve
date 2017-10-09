@@ -19,7 +19,6 @@ class InvitationsController < ApplicationController
 
   def create
     return redirect_to root_path unless valid_session?
-    return fail 'yes we made it'
     @invitation = Invitation.new(invitation_params)
 
     begin
