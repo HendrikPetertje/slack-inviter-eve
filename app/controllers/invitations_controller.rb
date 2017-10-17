@@ -20,18 +20,13 @@ class InvitationsController < ApplicationController
   def create
     return redirect_to root_path unless valid_session?
     @invitation = Invitation.new(invitation_params)
-    # begin
-      if @invitation.valid? && @invitation.perform
-        flash[:success] = "Check your email!"
-        redirect_to root_path and return
-      else
-        flash[:error] = 'Something went wrong, try again'
-        unprocessable
-      end
-    # rescue
-    #   flash[:error] = 'The slack API has issues, please try again later'
-    #   unprocessable
-    # end
+    if @invitation.valid? && @invitation.perform
+      flash[:success] = "Check your email!"
+      redirect_to root_path and return
+    else
+      flash[:error] = 'Something went wrong, try again'
+      unprocessable
+    end
   end
 
 
@@ -63,7 +58,7 @@ class InvitationsController < ApplicationController
   end
 
   def unprocessable
-    redirect_to root_path, alert: 'sorry, there was an error' and return
+    redirect_to root_path and return
   end
 
 end
