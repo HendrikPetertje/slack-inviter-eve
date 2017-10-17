@@ -5,7 +5,8 @@ class Invitation
   include ActiveModel::Model
 
   attribute :email, String
-  validates :email, presence: true
+  attribute :first_name, String
+  validates :email, :first_name, presence: true
 
   def enqueue
     InvitationWorker.perform_async(attributes)
@@ -14,6 +15,7 @@ class Invitation
   def perform
     slack_client.invite({
         email: email,
+        first_name: first_name,
         channels: ENV["SLACK_CHANNELS"].to_s.split(/\s*,\s*/)
       })
   end

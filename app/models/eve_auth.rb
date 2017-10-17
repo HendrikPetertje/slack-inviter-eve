@@ -12,7 +12,10 @@ class EveAuth
     return character_info if character_info[:status] == 'error'
     alliance_info = fetch_alliance_info(character_info)
     return alliance_info if alliance_info[:status] == 'error'
-    user_allowed_access?(alliance_info)
+    alliance_user = user_allowed_access?(alliance_info)
+    return alliance_user if alliance_user[:status] == 'error'
+    end_user = fetch_corp_info(alliance_user)
+    end_user
   end
 
   private
@@ -58,7 +61,6 @@ class EveAuth
       'https://login.eveonline.com/oauth/verify',
       headers: character_headers(bearer_token)
     ).parsed_response
-
     {
       id: response['CharacterID'],
       name: response['CharacterName'],
@@ -81,6 +83,7 @@ class EveAuth
       'https://api.eveonline.com/eve/CharacterInfo.xml.aspx',
       query: {characterID: character_info[:id] }
     ).parsed_response
+    character_info[:corp_id] = response['eveapi']['result']['corporationID']
     character_info[:alliance] = response['eveapi']['result']['alliance']
     character_info
   rescue StandardError => e
@@ -93,5 +96,17 @@ class EveAuth
     allowed_access = Rails.application.config.alliances.include?(alliance_info[:alliance])
     alliance_info[:allowed_access] = allowed_access
     alliance_info
+  end
+
+  def fetch_corp_info(character_info)
+    response = HTTParty.get(
+      'https://api.eveonline.com/corp/CorporationSheet.xml.aspx',
+      query: {corporationID: character_info[:corp_id] }
+    ).parsed_response
+    character_info[:corp] = response['eveapi']['result']['ticker']
+    character_info
+  rescue StandardError => e
+    puts e
+    {status: 'error'}
   end
 end

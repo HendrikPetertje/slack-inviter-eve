@@ -10,11 +10,12 @@ module Slack
       @token = token
     end
 
-    def invite(email:, channels: [])
+    def invite(email:, first_name:, channels: [])
       res = Net::HTTP.start("#{@subdomain}.slack.com", 443, use_ssl: true) do |http|
         req = Net::HTTP::Post.new("/api/users.admin.invite?t=#{Time.now.to_i}")
         req.set_form_data \
           email:       email,
+          first_name:  first_name,
           channels:    channels.join(","),
           token:       @token,
           set_active:  "true",

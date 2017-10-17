@@ -20,17 +20,18 @@ class InvitationsController < ApplicationController
   def create
     return redirect_to root_path unless valid_session?
     @invitation = Invitation.new(invitation_params)
-
-    begin
+    # begin
       if @invitation.valid? && @invitation.perform
         flash[:success] = "Check your email!"
         redirect_to root_path and return
       else
+        flash[:error] = 'Something went wrong, try again'
         unprocessable
       end
-    rescue
-      unprocessable
-    end
+    # rescue
+    #   flash[:error] = 'The slack API has issues, please try again later'
+    #   unprocessable
+    # end
   end
 
 
@@ -40,16 +41,21 @@ class InvitationsController < ApplicationController
     return false if params[:state].blank? || session[:current_user].blank?
     return false unless params[:state] == session[:current_user]
     auth = EveAuth.new(eve_code: params[:code]).authenticated
+    if auth[:status] == 'error'
+      flash[:error] = 'The EVE api seems to have some issues, please contact your alliance leadership'
+      return false
+    end
     unless auth[:allowed_access]
       flash[:error] = 'Something went wrong, please try again. You can only join with alliance characters'
       return false
     end
     @name = auth[:name]
+    @form_name = "[#{auth[:corp]}] #{auth[:name]}"
     true
   end
 
   def invitation_params
-    params.require(:invitation).permit(:email)
+    params.require(:invitation).permit(:email, :first_name)
   end
 
   def valid_session?

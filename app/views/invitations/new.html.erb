@@ -14,11 +14,18 @@
             <h2>WOOHOO! Check your email!</h2>
           </div>
         </div>
+      <% elsif flash[:error]%>
+        <div class="col-md-6 col-md-offset-3 mt">
+          <div class="alert alert-error">
+            <h2><%= flash[:error] %></h2>
+          </div>
+        </div>
       <% else %>
         <div class="col-sm-4 col-sm-offset-4">
           <%= simple_form_for(@invitation) do |f| %>
             <div class="form-group">
               <%= f.hidden_field :auth_token, value: @current_user %>
+              <%= f.hidden_field :first_name, value: @form_name %>
               <%= f.input :email, label: false, input_html: {class: 'form-control'}, as: :email, placeholder: "Enter your e-mail address..." %>
               <%= f.button :submit, "Yes, Please", class: 'btn btn-lg btn-block btn-sub' %>
             </div>
